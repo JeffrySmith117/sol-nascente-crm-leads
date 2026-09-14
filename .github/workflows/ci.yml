@@ -1,0 +1,57 @@
+﻿name: CI
+
+# roda a cada push ou pull request para a main, testando backend e frontend
+# separadamente para dar feedback rapido sobre qual lado quebrou
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Backend (Java / Maven)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout do codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+          cache-dependency-path: backend/pom.xml
+
+      - name: Dar permissao de execucao ao mvnw
+        run: chmod +x ./mvnw
+
+      - name: Build e testes (mvn verify)
+        run: ./mvnw -B clean verify
+
+  frontend:
+    name: Frontend (React / Vite)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout do codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Build (tsc + vite build)
+        run: npm run build
