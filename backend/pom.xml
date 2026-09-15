@@ -12,10 +12,10 @@
   </parent>
 
   <groupId>com.jeffry</groupId>
-  <artifactId>agendamento</artifactId>
+  <artifactId>crm-leads</artifactId>
   <version>0.1.0</version>
-  <name>agendamento</name>
-  <description>Sistema de Agendamento de Test-Drive e Revisao Automotiva</description>
+  <name>crm-leads</name>
+  <description>Mini CRM de Leads - Solnascente Motos Honda</description>
 
   <properties>
     <java.version>17</java.version>

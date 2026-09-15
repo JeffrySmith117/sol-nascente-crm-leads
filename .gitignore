@@ -1,0 +1,13 @@
+# Backend (build output / crash dumps)
+backend/target/
+backend/bin/
+backend/hs_err_pid*.log
+backend/replay_pid*.log
+
+# Frontend (build output / deps)
+frontend/node_modules/
+frontend/dist/
+frontend/tsconfig.tsbuildinfo
+
+# IDE
+.vscode/

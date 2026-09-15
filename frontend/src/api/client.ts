@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// em produção (Vercel), VITE_API_URL aponta para o backend no Render;
+// em produção (Vercel), VITE_API_URL aponta para o backend no Railway;
 // em desenvolvimento local, cai no localhost por padrão
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080/api",

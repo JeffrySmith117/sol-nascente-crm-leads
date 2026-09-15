@@ -4,30 +4,15 @@ CREATE TABLE usuarios (
     email VARCHAR(150) NOT NULL UNIQUE,
     senha_hash VARCHAR(255) NOT NULL,
     telefone VARCHAR(20) NOT NULL,
-    perfil VARCHAR(20) NOT NULL DEFAULT 'CLIENTE'
+    perfil VARCHAR(20) NOT NULL DEFAULT 'ADMIN'
 );
 
-CREATE TABLE veiculos (
+CREATE TABLE leads (
     id BIGSERIAL PRIMARY KEY,
-    modelo VARCHAR(100) NOT NULL,
-    versao VARCHAR(100) NOT NULL,
-    placa VARCHAR(20),
-    disponivel_para_test_drive BOOLEAN NOT NULL DEFAULT TRUE
+    nome VARCHAR(150) NOT NULL,
+    whatsapp VARCHAR(20) NOT NULL,
+    modelo_interesse VARCHAR(100) NOT NULL,
+    unidade VARCHAR(20) NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'NOVO',
+    criado_em TIMESTAMP NOT NULL DEFAULT NOW()
 );
-
-CREATE TABLE agendamentos (
-    id BIGSERIAL PRIMARY KEY,
-    cliente_id BIGINT NOT NULL REFERENCES usuarios(id),
-    veiculo_id BIGINT NOT NULL REFERENCES veiculos(id),
-    horario TIMESTAMP NOT NULL,
-    tipo_servico VARCHAR(20) NOT NULL,
-    status VARCHAR(20) NOT NULL DEFAULT 'CONFIRMADO',
-    observacoes VARCHAR(500),
-    UNIQUE (veiculo_id, horario)
-);
-
--- alguns veiculos de exemplo para testar a aplicacao localmente
-INSERT INTO veiculos (modelo, versao, placa, disponivel_para_test_drive) VALUES
-    ('Honda City', 'EX CVT', NULL, TRUE),
-    ('Honda HR-V', 'Touring', NULL, TRUE),
-    ('Honda Civic', 'Sport', NULL, TRUE);

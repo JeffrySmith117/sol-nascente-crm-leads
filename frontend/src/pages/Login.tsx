@@ -4,11 +4,8 @@ import { api } from "../api/client";
 import type { TokenResponse } from "../types";
 
 export default function Login() {
-  const [modo, setModo] = useState<"login" | "cadastro">("login");
-  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [telefone, setTelefone] = useState("");
   const [erro, setErro] = useState<string | null>(null);
   const [carregando, setCarregando] = useState(false);
 
@@ -20,19 +17,15 @@ export default function Login() {
     setCarregando(true);
 
     try {
-      const endpoint = modo === "login" ? "/auth/login" : "/auth/registrar";
-      const payload =
-        modo === "login" ? { email, senha } : { nome, email, senha, telefone };
-
-      const { data } = await api.post<TokenResponse>(endpoint, payload);
+      const { data } = await api.post<TokenResponse>("/auth/login", { email, senha });
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("nome", data.nome);
       localStorage.setItem("perfil", data.perfil);
 
-      navigate(data.perfil === "ADMIN" ? "/admin" : "/agendar");
+      navigate("/admin");
     } catch (err: any) {
-      setErro(err.response?.data?.erro ?? "Não foi possível concluir. Tente novamente.");
+      setErro(err.response?.data?.erro ?? "Não foi possível entrar. Verifique suas credenciais.");
     } finally {
       setCarregando(false);
     }
@@ -44,28 +37,7 @@ export default function Login() {
         onSubmit={handleSubmit}
         className="w-full max-w-sm bg-white shadow-md rounded-xl p-8 space-y-4"
       >
-        <h1 className="text-2xl font-bold text-brand">
-          {modo === "login" ? "Entrar" : "Criar conta"}
-        </h1>
-
-        {modo === "cadastro" && (
-          <>
-            <input
-              className="w-full border rounded-md px-3 py-2"
-              placeholder="Nome completo"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              required
-            />
-            <input
-              className="w-full border rounded-md px-3 py-2"
-              placeholder="Telefone"
-              value={telefone}
-              onChange={(e) => setTelefone(e.target.value)}
-              required
-            />
-          </>
-        )}
+        <h1 className="text-2xl font-bold text-brand">Área administrativa</h1>
 
         <input
           type="email"
@@ -91,16 +63,12 @@ export default function Login() {
           disabled={carregando}
           className="w-full bg-brand hover:bg-brand-dark text-white rounded-md py-2 font-semibold disabled:opacity-60"
         >
-          {carregando ? "Aguarde..." : modo === "login" ? "Entrar" : "Cadastrar"}
+          {carregando ? "Aguarde..." : "Entrar"}
         </button>
 
-        <button
-          type="button"
-          className="w-full text-sm text-gray-500 underline"
-          onClick={() => setModo(modo === "login" ? "cadastro" : "login")}
-        >
-          {modo === "login" ? "Não tem conta? Cadastre-se" : "Já tem conta? Entrar"}
-        </button>
+        <p className="text-center text-xs text-gray-400">
+          <a href="/" className="underline">Voltar ao formulário de contato</a>
+        </p>
       </form>
     </div>
   );

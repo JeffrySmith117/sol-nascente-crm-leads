@@ -1,29 +1,25 @@
-export type TipoServico = "TEST_DRIVE" | "REVISAO";
-export type StatusAgendamento = "CONFIRMADO" | "CANCELADO" | "CONCLUIDO";
+export type Unidade = "TERESINA" | "TIMON";
+export type StatusLead = "NOVO" | "EM_CONTATO" | "CONVERTIDO" | "PERDIDO";
 
-export interface Veiculo {
+export interface Lead {
   id: number;
-  modelo: string;
-  versao: string;
-  disponivelParaTestDrive: boolean;
+  nome: string;
+  whatsapp: string;
+  modeloInteresse: string;
+  unidade: Unidade;
+  status: StatusLead;
+  criadoEm: string; // ISO datetime
 }
 
-export interface Agendamento {
-  id: number;
-  clienteNome: string;
-  veiculoModelo: string;
-  horario: string; // ISO datetime
-  tipoServico: TipoServico;
-  status: StatusAgendamento;
+export interface NovoLeadRequest {
+  nome: string;
+  whatsapp: string;
+  modeloInteresse: string;
+  unidade: Unidade;
 }
 
 export interface TokenResponse {
   token: string;
   nome: string;
-  perfil: "CLIENTE" | "ADMIN";
-}
-
-export interface HorarioSugerido {
-  horarioSugerido: string;
-  motivo: string;
+  perfil: "ADMIN";
 }
