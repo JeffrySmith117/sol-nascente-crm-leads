@@ -12,7 +12,7 @@ Teste tecnico (3a etapa) para a vaga de Desenvolvedor Full Stack Jr. na Solnasce
 
 - URL: https://sol-nascente-crm-leads.vercel.app/login
 - E-mail: admin@teste.com
-- Senha: SolNascente@2026
+- Senha: enviada separadamente ao avaliador (fora deste repositorio publico)
 
 Observacao: por se tratar de um ambiente de teste/demonstracao, essas credenciais estao expostas aqui de proposito para facilitar a avaliacao. Em producao real, isso nunca seria versionado (ver secao "O que eu faria diferente em producao").
 
