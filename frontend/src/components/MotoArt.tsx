@@ -14,12 +14,17 @@ export default function MotoArt({ cor = "#C8102E", className }: MotoArtProps) {
       aria-label="Ilustração de motocicleta"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <ellipse cx="212" cy="222" rx="170" ry="9" fill="#0F172A" opacity="0.14" />
+      <defs>
+        <filter id="moto-glow" x="-20%" y="-200%" width="140%" height="500%">
+          <feGaussianBlur stdDeviation="9" />
+        </filter>
+      </defs>
+      <ellipse cx="212" cy="222" rx="170" ry="9" fill={cor} opacity="0.5" filter="url(#moto-glow)" />
 
       {/* rodas */}
       {[100, 322].map((cx) => (
         <g key={cx}>
-          <circle cx={cx} cy="172" r="46" fill="#111827" />
+          <circle cx={cx} cy="172" r="46" fill="#1E293B" stroke="#475569" strokeWidth="2" />
           <circle cx={cx} cy="172" r="31" fill="#E5E7EB" />
           <circle cx={cx} cy="172" r="24" fill="#F8FAFC" stroke="#94A3B8" strokeWidth="2" />
           <g stroke="#94A3B8" strokeWidth="2">

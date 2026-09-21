@@ -33,57 +33,104 @@ export const UNIDADES: Record<Unidade, UnidadeInfo> = {
   },
 };
 
-export interface MotoDestaque {
+export type Categoria = "Urbanas" | "Scooter" | "Trail" | "Naked";
+
+export interface Moto {
+  slug: string; // nome do arquivo da foto em /public/motos/<slug>.webp (ou .png/.jpg)
   nome: string; // valor enviado no campo "modeloInteresse"
   selo: string;
+  categoria: Categoria;
   situacao: string;
   descricao: string;
-  parcela: number;
-  cor: string; // cor principal da ilustração
+  // só preenchido onde a loja informou um valor; nos demais o card mostra "consulte as condições"
+  parcela?: number;
+  cor: string; // cor da ilustração usada enquanto a foto real não existe
 }
 
-export const MOTOS_DESTAQUE: MotoDestaque[] = [
+// linha atual de motos Honda no Brasil (as fotos reais entram em /public/motos, ver README da pasta)
+export const MOTOS: Moto[] = [
   {
-    nome: "Honda CG 160",
-    selo: "CG 160 Titan",
-    situacao: "Em Estoque",
+    slug: "cg-160-titan",
+    nome: "Honda CG 160 Titan",
+    selo: "CG 160",
+    categoria: "Urbanas",
+    situacao: "Em estoque",
     descricao: "A motocicleta mais vendida do Brasil, econômica e robusta.",
     parcela: 389,
-    cor: "#C8102E",
+    cor: "#E10A2B",
   },
   {
-    nome: "Honda Biz",
+    slug: "biz-125",
+    nome: "Honda Biz 125",
     selo: "Biz 125",
-    situacao: "Pronta Entrega",
+    categoria: "Urbanas",
+    situacao: "Pronta entrega",
     descricao: "Praticidade com porta-capacete e câmbio semiautomático.",
     parcela: 349,
-    cor: "#B4142B",
+    cor: "#C40D28",
   },
   {
+    slug: "pop-110i",
+    nome: "Honda Pop 110i",
+    selo: "Pop 110i",
+    categoria: "Urbanas",
+    situacao: "Em estoque",
+    descricao: "Porta de entrada da linha: leve, econômica e ideal para o dia a dia.",
+    cor: "#2563EB",
+  },
+  {
+    slug: "pcx",
+    nome: "Honda PCX",
+    selo: "PCX",
+    categoria: "Scooter",
+    situacao: "Em estoque",
+    descricao: "Scooter premium com conforto, painel digital e ótima autonomia.",
+    cor: "#94A3B8",
+  },
+  {
+    slug: "nxr-160-bros",
     nome: "Honda NXR 160 Bros",
     selo: "Bros 160 ABS",
-    situacao: "Últimas Unidades",
+    categoria: "Trail",
+    situacao: "Últimas unidades",
     descricao: "Suspensão de longo curso para qualquer tipo de terreno.",
     parcela: 459,
-    cor: "#D6321F",
+    cor: "#EA580C",
   },
   {
-    nome: "Honda CB 300F",
-    selo: "Twister 2025",
+    slug: "xre-300",
+    nome: "Honda XRE 300",
+    selo: "XRE 300",
+    categoria: "Trail",
+    situacao: "Em estoque",
+    descricao: "Aventura de verdade: motor 300 cc, rodas raiadas e postura de trail.",
+    cor: "#B91C1C",
+  },
+  {
+    slug: "cb-300f-twister",
+    nome: "Honda CB 300F Twister",
+    selo: "Twister",
+    categoria: "Naked",
     situacao: "Lançamento",
     descricao: "Design esportivo, embreagem assistida e iluminação full LED.",
     parcela: 549,
     cor: "#1E3A8A",
   },
+  {
+    slug: "cb-500-hornet",
+    nome: "Honda CB 500 Hornet",
+    selo: "CB 500 Hornet",
+    categoria: "Naked",
+    situacao: "Sob consulta",
+    descricao: "Naked bicilíndrica com pegada esportiva e muito torque em baixa.",
+    cor: "#F59E0B",
+  },
 ];
 
-// modelos oferecidos no <select> do formulário: os destaques e mais alguns da linha
-export const MODELOS_FORMULARIO: string[] = [
-  ...MOTOS_DESTAQUE.map((m) => m.nome),
-  "Honda Pop 110i",
-  "Honda PCX",
-  "Honda XRE 300",
-];
+export const CATEGORIAS: Array<Categoria | "Todas"> = ["Todas", "Urbanas", "Scooter", "Trail", "Naked"];
+
+// modelos oferecidos no <select> do formulário
+export const MODELOS_FORMULARIO: string[] = MOTOS.map((m) => m.nome);
 
 // mesma lógica do link do WhatsApp, mas devolve null quando o número não foi configurado
 export function linkWhatsappUnidade(unidade: UnidadeInfo, mensagem: string): string | null {

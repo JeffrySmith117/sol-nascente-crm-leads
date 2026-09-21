@@ -187,6 +187,16 @@ export const IconPercent = criar(
 
 export const IconMenu = criar(<path d="M4 6h16M4 12h16M4 18h16" />);
 
+export const IconKanban = criar(
+  <>
+    <rect x="3" y="3" width="5" height="18" rx="1" />
+    <rect x="10" y="3" width="5" height="12" rx="1" />
+    <rect x="17" y="3" width="4" height="8" rx="1" />
+  </>
+);
+
+export const IconList = criar(<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />);
+
 export const IconExternal = criar(
   <>
     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />

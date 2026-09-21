@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { api } from "../api/client";
 import { IconLock, IconUser } from "../components/Icons";
 import Logo from "../components/Logo";
+import { MarcaDagua, Mascote } from "../components/Marca";
 import type { TokenResponse } from "../types";
 
 export default function Login() {
@@ -34,76 +35,100 @@ export default function Login() {
   }
 
   return (
-    <div className="grid min-h-screen place-items-center bg-gradient-to-br from-slate-900 via-slate-800 to-brand-dark px-4">
-      <div className="w-full max-w-sm">
-        <div className="mb-6 flex justify-center">
-          <Logo clara />
+    <div className="tema-claro relative min-h-screen overflow-hidden bg-white">
+      <MarcaDagua />
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-1.5 bg-brand" />
+
+      <div className="relative z-10 mx-auto grid min-h-screen max-w-5xl items-center gap-8 px-4 py-10 lg:grid-cols-2">
+        {/* mascote (só aparece quando /public/marca/mascote.* existir) */}
+        <div className="hidden justify-center lg:flex">
+          <Mascote className="max-h-[520px] w-auto object-contain drop-shadow-2xl" />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl border-t-4 border-brand bg-white p-7 shadow-2xl">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-brand">Área restrita</p>
-            <h1 className="text-xl font-extrabold">Painel administrativo</h1>
+        <div className="mx-auto w-full max-w-sm">
+          {/* celular: mascote menor acima do formulário */}
+          <div className="mb-3 flex justify-center lg:hidden">
+            <Mascote className="max-h-32 w-auto object-contain" />
+          </div>
+          <div className="mb-6 flex justify-center lg:justify-start">
+            <Logo tema="claro" imagem />
           </div>
 
-          <div>
-            <label htmlFor="login-email" className="mb-1 block text-xs font-semibold text-slate-700">
-              E-mail
-            </label>
-            <div className="relative">
-              <IconUser className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-              <input
-                id="login-email"
-                type="email"
-                className="campo pl-9"
-                placeholder="voce@empresa.com"
-                autoComplete="username"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="login-senha" className="mb-1 block text-xs font-semibold text-slate-700">
-              Senha
-            </label>
-            <div className="relative">
-              <IconLock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-              <input
-                id="login-senha"
-                type="password"
-                className="campo pl-9"
-                placeholder="Sua senha"
-                autoComplete="current-password"
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          {erro && (
-            <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
-              {erro}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={carregando}
-            className="w-full rounded-lg bg-brand py-3 text-sm font-bold text-white shadow-sm transition hover:bg-brand-dark disabled:cursor-wait disabled:opacity-70"
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4 rounded-2xl border border-slate-200 bg-white/90 p-7 shadow-xl backdrop-blur [border-top-color:#E10A2B] [border-top-width:4px]"
           >
-            {carregando ? "Aguarde..." : "Entrar"}
-          </button>
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-brand">Área restrita</p>
+              <h1 className="titulo text-4xl text-slate-900">Painel de atendimento</h1>
+              <p className="text-sm text-slate-500">Entre para acompanhar os leads da concessionária.</p>
+            </div>
 
-          <p className="text-center text-xs text-slate-500">
-            <Link to="/" className="font-semibold text-brand hover:underline">
-              ← Voltar ao site
-            </Link>
-          </p>
-        </form>
+            <div>
+              <label
+                htmlFor="login-email"
+                className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-slate-500"
+              >
+                E-mail
+              </label>
+              <div className="relative">
+                <IconUser className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <input
+                  id="login-email"
+                  type="email"
+                  className="campo-claro pl-9"
+                  placeholder="voce@empresa.com"
+                  autoComplete="username"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="login-senha"
+                className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-slate-500"
+              >
+                Senha
+              </label>
+              <div className="relative">
+                <IconLock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <input
+                  id="login-senha"
+                  type="password"
+                  className="campo-claro pl-9"
+                  placeholder="Sua senha"
+                  autoComplete="current-password"
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            {erro && (
+              <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+                {erro}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={carregando}
+              className="w-full rounded-lg bg-brand py-3 text-sm font-bold uppercase tracking-wide text-white shadow-md transition hover:bg-brand-dark disabled:cursor-wait disabled:opacity-70"
+            >
+              {carregando ? "Aguarde..." : "Entrar"}
+            </button>
+
+            <p className="text-center text-xs">
+              <Link to="/" className="font-semibold text-slate-500 hover:text-brand">
+                ← Voltar ao site
+              </Link>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );
