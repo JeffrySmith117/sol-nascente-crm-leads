@@ -1,5 +1,5 @@
 import { Navigate, Route, BrowserRouter, Routes } from "react-router-dom";
-import LeadForm from "./pages/LeadForm";
+import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import LeadsPanel from "./pages/LeadsPanel";
 
@@ -13,7 +13,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LeadForm />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route
           path="/admin"
