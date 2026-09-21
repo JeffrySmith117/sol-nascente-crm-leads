@@ -85,7 +85,7 @@ export const MOTOS: Moto[] = [
     categoria: "Scooter",
     situacao: "Em estoque",
     descricao: "Scooter premium com conforto, painel digital e ótima autonomia.",
-    cor: "#94A3B8",
+    cor: "#92400E",
   },
   {
     slug: "nxr-160-bros",
@@ -98,6 +98,24 @@ export const MOTOS: Moto[] = [
     cor: "#EA580C",
   },
   {
+    slug: "xr-300l-tornado",
+    nome: "Honda XR 300L Tornado",
+    selo: "XR 300L Tornado",
+    categoria: "Trail",
+    situacao: "Em estoque",
+    descricao: "Trail 300 cc com visual de competição e suspensão de longo curso.",
+    cor: "#B91C1C",
+  },
+  {
+    slug: "xre-190",
+    nome: "Honda XRE 190",
+    selo: "XRE 190",
+    categoria: "Trail",
+    situacao: "Em estoque",
+    descricao: "Trail versátil para cidade e estrada, com posição de pilotagem alta e confortável.",
+    cor: "#64748B",
+  },
+  {
     slug: "xre-300",
     nome: "Honda XRE 300",
     selo: "XRE 300",
@@ -105,6 +123,15 @@ export const MOTOS: Moto[] = [
     situacao: "Em estoque",
     descricao: "Aventura de verdade: motor 300 cc, rodas raiadas e postura de trail.",
     cor: "#B91C1C",
+  },
+  {
+    slug: "nx-500",
+    nome: "Honda NX 500",
+    selo: "NX 500",
+    categoria: "Trail",
+    situacao: "Sob consulta",
+    descricao: "Big trail de 500 cc: conforto para viagens longas e pegada de aventura.",
+    cor: "#94A3B8",
   },
   {
     slug: "cb-300f-twister",
@@ -115,15 +142,6 @@ export const MOTOS: Moto[] = [
     descricao: "Design esportivo, embreagem assistida e iluminação full LED.",
     parcela: 549,
     cor: "#1E3A8A",
-  },
-  {
-    slug: "cb-500-hornet",
-    nome: "Honda CB 500 Hornet",
-    selo: "CB 500 Hornet",
-    categoria: "Naked",
-    situacao: "Sob consulta",
-    descricao: "Naked bicilíndrica com pegada esportiva e muito torque em baixa.",
-    cor: "#F59E0B",
   },
 ];
 
