@@ -37,6 +37,13 @@ Infraestrutura
 - Frontend: Vercel
 - Banco de dados: Neon (Postgres serverless)
 
+### Variaveis de ambiente do frontend (Vercel)
+
+- `VITE_API_URL`: URL da API, ex.: `https://sol-nascente-crm-leads.onrender.com/api`
+- `VITE_WHATSAPP_TERESINA` e `VITE_WHATSAPP_TIMON` (opcionais): numero com DDI+DDD, ex.: `5586912345678`. Sem elas, os botoes "Falar com a unidade" e "Chamar" levam ao formulario em vez de abrir o WhatsApp.
+
+Como o plano gratuito do Render "dorme" o servico, a landing acorda a API assim que abre e o formulario tenta reenviar sozinho (ate 4 tentativas) enquanto o servidor sobe.
+
 ## Funcionalidades
 
 - Formulario publico de captura de lead (nome, WhatsApp, modelo de interesse, unidade Teresina/Timon), com validacao de campos e feedback visual de sucesso/erro.
