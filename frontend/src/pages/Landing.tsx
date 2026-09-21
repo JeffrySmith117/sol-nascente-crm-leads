@@ -60,7 +60,7 @@ export default function Landing() {
           <Link to="/" aria-label="Sol Nascente Motos Honda">
             <Logo />
           </Link>
-          <nav className="hidden items-center gap-7 text-sm font-medium text-white/70 md:flex">
+          <nav className="hidden items-center gap-7 whitespace-nowrap text-sm font-medium text-white/70 md:flex">
             <a href="#modelos" className="transition hover:text-white">
               Modelos
             </a>
@@ -72,18 +72,28 @@ export default function Landing() {
             </a>
           </nav>
           <div className="flex items-center gap-2">
+            {/* celular e tablet: só o cadeado (economiza espaço); a partir de lg: com o texto */}
             <Link
               to="/login"
-              className="hidden items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold text-white/60 transition hover:text-white sm:flex"
+              aria-label="Área administrativa"
+              title="Área administrativa"
+              className="grid h-9 w-9 place-items-center rounded-lg border border-white/15 text-white/75 transition hover:border-brand hover:text-white lg:hidden"
+            >
+              <IconLock className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/login"
+              className="hidden items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-xs font-semibold text-white/60 transition hover:text-white lg:flex"
             >
               <IconLock className="h-3.5 w-3.5" /> Área administrativa
             </Link>
             <button
               type="button"
               onClick={() => irParaProposta()}
-              className="rounded-lg bg-brand px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-brand-soft"
+              className="rounded-lg bg-brand px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-brand-soft md:whitespace-nowrap"
             >
-              Solicitar proposta
+              <span className="sm:hidden">Proposta</span>
+              <span className="hidden sm:inline">Solicitar proposta</span>
             </button>
           </div>
         </div>
@@ -141,7 +151,7 @@ export default function Landing() {
                   alt="Moto esportiva Honda zero quilômetro"
                   cor="#E10A2B"
                   mesclar={false}
-                  className="aspect-[4/3] w-full"
+                  className="h-auto w-full"
                 />
               </div>
             </div>
@@ -351,7 +361,15 @@ export default function Landing() {
       <footer className="border-t border-white/10 py-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 text-xs text-white/45 sm:flex-row">
           <Logo />
-          <p>© {new Date().getFullYear()} Sol Nascente Motos Honda. Todos os direitos reservados.</p>
+          <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-5">
+            <p>© {new Date().getFullYear()} Sol Nascente Motos Honda. Todos os direitos reservados.</p>
+            <Link
+              to="/login"
+              className="inline-flex items-center gap-1.5 font-semibold text-white/60 transition hover:text-white"
+            >
+              <IconLock className="h-3.5 w-3.5" /> Área administrativa
+            </Link>
+          </div>
         </div>
       </footer>
 
