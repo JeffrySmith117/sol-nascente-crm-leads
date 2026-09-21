@@ -1,27 +1,39 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { aquecerApi } from "../api/client";
-import {
-  IconAward,
-  IconChevronDown,
-  IconClock,
-  IconExternal,
-  IconLock,
-  IconMapPin,
-  IconMessage,
-  IconPercent,
-  IconShieldCheck,
-  IconZap,
-} from "../components/Icons";
+import { IconArrowRight, IconClock, IconLock, IconMapPin, IconMessage, IconShieldCheck } from "../components/Icons";
 import Logo from "../components/Logo";
-import MotoArt from "../components/MotoArt";
+import MotoFoto from "../components/MotoFoto";
 import ProposalForm from "../components/ProposalForm";
-import { linkWhatsappUnidade, MOTOS_DESTAQUE, UNIDADES } from "../config";
+import { CATEGORIAS, linkWhatsappUnidade, MOTOS, UNIDADES } from "../config";
+import type { Categoria } from "../config";
 import { formatarReais } from "../lib/format";
+
+const NUMEROS = [
+  { valor: "5 min", legenda: "Tempo médio de primeiro contato" },
+  { valor: "0%", legenda: "Taxa em planos de consórcio contemplados" },
+  { valor: "Nº 1", legenda: "Maior estoque do Piauí e Maranhão" },
+];
+
+const ETAPAS = [
+  {
+    titulo: "Envie seus dados",
+    texto: "Nome, WhatsApp e o modelo que você quer. Leva menos de um minuto.",
+  },
+  {
+    titulo: "Um consultor chama você",
+    texto: "Atendimento oficial pelo WhatsApp, em média em 5 minutos.",
+  },
+  {
+    titulo: "Simulação e test-ride",
+    texto: "Receba a simulação das parcelas e agende o test-ride em Teresina ou Timon.",
+  },
+];
 
 export default function Landing() {
   const [modeloEscolhido, setModeloEscolhido] = useState("");
-  const propostaRef = useRef<HTMLDivElement>(null);
+  const [categoria, setCategoria] = useState<Categoria | "Todas">("Todas");
+  const propostaRef = useRef<HTMLElement>(null);
 
   // começa a acordar o backend (plano gratuito do Render) enquanto a pessoa lê a página
   useEffect(() => {
@@ -30,260 +42,334 @@ export default function Landing() {
 
   function irParaProposta(modelo?: string) {
     if (modelo) setModeloEscolhido(modelo);
-    propostaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    propostaRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
-  const teresina = UNIDADES.TERESINA;
-  const linkAtendimentoImediato = linkWhatsappUnidade(teresina, "Olá! Gostaria de atendimento sobre motos Honda.");
+  const motosVisiveis = useMemo(
+    () => MOTOS.filter((m) => categoria === "Todas" || m.categoria === categoria),
+    [categoria]
+  );
+
+  const linkPlantao = linkWhatsappUnidade(UNIDADES.TERESINA, "Olá! Gostaria de atendimento sobre motos Honda.");
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-clip bg-night">
       {/* ===== navbar ===== */}
-      <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-night/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-          <div className="flex items-center gap-8">
-            <Link to="/" aria-label="Sol Nascente Motos Honda">
-              <Logo />
-            </Link>
-            <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 md:flex">
-              <a href="#modelos" className="flex items-center gap-1 hover:text-brand">
-                Modelos <IconChevronDown className="h-3.5 w-3.5" />
-              </a>
-              <a href="#unidades" className="hover:text-brand">
-                Unidades
-              </a>
-            </nav>
-          </div>
-          <div className="flex items-center gap-2">
-            <a
-              href="#unidades"
-              className="hidden items-center gap-1.5 rounded-lg bg-chip px-3 py-2 text-xs font-semibold text-slate-700 sm:flex"
-            >
-              <IconMessage className="h-4 w-4 text-brand" /> Teresina &amp; Timon
+          <Link to="/" aria-label="Sol Nascente Motos Honda">
+            <Logo />
+          </Link>
+          <nav className="hidden items-center gap-7 text-sm font-medium text-white/70 md:flex">
+            <a href="#modelos" className="transition hover:text-white">
+              Modelos
             </a>
+            <a href="#como-funciona" className="transition hover:text-white">
+              Como funciona
+            </a>
+            <a href="#unidades" className="transition hover:text-white">
+              Unidades
+            </a>
+          </nav>
+          <div className="flex items-center gap-2">
             <Link
               to="/login"
-              className="flex items-center gap-1.5 rounded-lg bg-chip px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-200"
+              className="hidden items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold text-white/60 transition hover:text-white sm:flex"
             >
-              <IconLock className="h-4 w-4" /> Área Administrativa
+              <IconLock className="h-3.5 w-3.5" /> Área administrativa
             </Link>
+            <button
+              type="button"
+              onClick={() => irParaProposta()}
+              className="rounded-lg bg-brand px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-brand-soft"
+            >
+              Solicitar proposta
+            </button>
           </div>
         </div>
       </header>
 
       {/* ===== hero ===== */}
-      <section className="mx-auto grid max-w-6xl gap-8 px-4 pb-10 pt-8 lg:grid-cols-[1.25fr_1fr] lg:items-start">
-        <div>
-          <p className="inline-flex flex-wrap items-center gap-x-2 gap-y-1 rounded-xl bg-white px-3 py-1.5 text-[11px] text-slate-500 shadow-card">
-            <span className="rounded-full bg-brand-soft px-2 py-0.5 font-bold uppercase tracking-wide text-brand">
+      <section className="listras relative isolate overflow-hidden">
+        <div className="pointer-events-none absolute -left-40 top-0 -z-10 h-[520px] w-[520px] rounded-full bg-brand/25 blur-[140px]" />
+        <div className="pointer-events-none absolute -right-20 bottom-0 -z-10 h-[420px] w-[420px] rounded-full bg-brand/10 blur-[120px]" />
+
+        <div className="mx-auto grid max-w-6xl items-center gap-6 px-4 pb-24 pt-10 lg:grid-cols-[1.05fr_1fr] lg:pb-28 lg:pt-16">
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full border border-brand/40 bg-brand/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-brand-soft">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand" />
               Condições exclusivas de fábrica
-            </span>
-            Entrada facilitada + parcelas que cabem no seu bolso
-          </p>
-
-          <h1 className="mt-4 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-            Encontre sua <span className="text-brand">próxima Honda</span> zero km.
-          </h1>
-          <p className="mt-3 max-w-xl text-slate-600">
-            Preencha seus dados e nossa equipe de consultores oficiais entrará em contato pelo WhatsApp para ajudar
-            você a encontrar a moto ideal com simulação em tempo real.
-          </p>
-
-          <div className="relative mt-6 overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-brand-dark shadow-card">
-            <div className="grid place-items-center px-6 pb-4 pt-10">
-              <MotoArt cor="#E11D2E" className="w-full max-w-md drop-shadow-2xl" />
-            </div>
-            <div className="flex flex-wrap items-end justify-between gap-3 bg-black/40 p-5">
-              <div>
-                <div className="mb-2 flex gap-2">
-                  <span className="rounded bg-white/95 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-800">
-                    Showroom oficial
-                  </span>
-                  <span className="rounded bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
-                    Pronta entrega
-                  </span>
-                </div>
-                <h2 className="text-xl font-bold text-white sm:text-2xl">Linha Honda Performance &amp; Urbano</h2>
-                <p className="text-xs text-white/75">
-                  Disponível para test-ride nas concessionárias de Teresina e Timon
-                </p>
-              </div>
-              <div className="flex items-center gap-2 rounded-xl bg-white/95 px-3 py-2">
-                <IconShieldCheck className="h-6 w-6 text-brand" />
-                <div className="leading-tight">
-                  <p className="text-lg font-extrabold">3 Anos</p>
-                  <p className="text-[10px] text-slate-500">de Garantia Honda</p>
-                </div>
-              </div>
+            </p>
+            <h1 className="titulo mt-4 text-6xl leading-[0.9] sm:text-7xl lg:text-8xl">
+              Sua próxima
+              <br />
+              <span className="text-brand">Honda</span> zero km
+            </h1>
+            <p className="mt-5 max-w-lg text-base leading-relaxed text-white/65">
+              Entrada facilitada e parcelas que cabem no seu bolso. Deixe seus dados e um consultor oficial chama
+              você no WhatsApp com a simulação pronta.
+            </p>
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => irParaProposta()}
+                className="flex items-center gap-2 rounded-lg bg-brand px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-white shadow-glow transition hover:bg-brand-soft"
+              >
+                Quero minha proposta <IconArrowRight className="h-4 w-4" />
+              </button>
+              <a
+                href="#modelos"
+                className="rounded-lg border border-white/20 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-white transition hover:border-white/50"
+              >
+                Ver modelos
+              </a>
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-3 gap-3">
-            {[
-              { icone: <IconClock className="h-5 w-5 text-brand" />, valor: "5 min", legenda: "Tempo médio de primeiro contato" },
-              { icone: <IconPercent className="h-5 w-5 text-brand" />, valor: "0% Taxa", legenda: "Planos de consórcio contemplados" },
-              { icone: <IconAward className="h-5 w-5 text-brand" />, valor: "Líder", legenda: "Maior estoque do Piauí e Maranhão" },
-            ].map((item) => (
-              <div key={item.valor} className="rounded-xl bg-white p-3 shadow-card">
-                <div className="flex items-center gap-2">
-                  {item.icone}
-                  <p className="text-sm font-extrabold sm:text-base">{item.valor}</p>
-                </div>
-                <p className="mt-1 text-[11px] leading-snug text-slate-500">{item.legenda}</p>
+          <div className="relative">
+            <span
+              aria-hidden="true"
+              className="titulo texto-contorno pointer-events-none absolute -top-6 right-0 select-none text-[8rem] leading-none sm:text-[12rem]"
+            >
+              0 km
+            </span>
+            <MotoFoto
+              slug="hero"
+              alt="Moto Honda zero quilômetro"
+              cor="#E10A2B"
+              className="relative w-full max-w-xl drop-shadow-[0_24px_40px_rgba(225,10,43,0.35)] lg:ml-auto"
+            />
+            <div className="absolute -bottom-2 left-0 flex items-center gap-2 rounded-xl border border-white/10 bg-panel/90 px-3 py-2 backdrop-blur sm:left-4">
+              <IconShieldCheck className="h-6 w-6 text-brand" />
+              <div className="leading-tight">
+                <p className="titulo text-xl">3 anos</p>
+                <p className="text-[10px] text-white/55">de garantia Honda</p>
               </div>
+            </div>
+            <span className="absolute right-0 top-14 -skew-x-6 rounded bg-brand px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-white sm:right-4">
+              Pronta entrega
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== barra de proposta ===== */}
+      <section
+        ref={propostaRef}
+        id="proposta"
+        className="relative z-10 mx-auto -mt-16 max-w-6xl scroll-mt-24 px-4 lg:-mt-20"
+      >
+        <div className="overflow-hidden rounded-2xl border border-white/10 border-t-brand bg-panel p-5 shadow-card sm:p-6 [border-top-width:3px]">
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-brand-soft">
+                Atendimento digital • resposta em cerca de 5 min
+              </p>
+              <h2 className="titulo text-3xl">Solicitar proposta</h2>
+            </div>
+            {linkPlantao && (
+              <a
+                href={linkPlantao}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 text-sm font-semibold text-emerald-400 transition hover:text-emerald-300"
+              >
+                <IconMessage className="h-4 w-4" /> Prefere falar agora? Chamar no WhatsApp
+              </a>
+            )}
+          </div>
+          <ProposalForm modeloInicial={modeloEscolhido} />
+        </div>
+      </section>
+
+      {/* ===== números ===== */}
+      <section className="mx-auto mt-14 max-w-6xl px-4">
+        <div className="grid grid-cols-3 divide-x divide-white/10 rounded-2xl border border-white/10 bg-panel/60">
+          {NUMEROS.map((n) => (
+            <div key={n.valor} className="px-3 py-4 sm:px-6 sm:py-5">
+              <p className="titulo text-3xl text-brand sm:text-5xl">{n.valor}</p>
+              <p className="mt-1 text-[10px] leading-snug text-white/55 sm:text-xs">{n.legenda}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ===== modelos ===== */}
+      <section id="modelos" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-16">
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-brand-soft">Garagem Sol Nascente</p>
+            <h2 className="titulo text-4xl sm:text-5xl">A linha Honda completa</h2>
+          </div>
+          <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filtrar modelos por categoria">
+            {CATEGORIAS.map((c) => (
+              <button
+                key={c}
+                type="button"
+                role="tab"
+                aria-selected={categoria === c}
+                onClick={() => setCategoria(c)}
+                className={`rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wide transition ${
+                  categoria === c
+                    ? "bg-brand text-white"
+                    : "border border-white/15 text-white/65 hover:border-white/40 hover:text-white"
+                }`}
+              >
+                {c}
+              </button>
             ))}
           </div>
         </div>
 
-        {/* ===== card do formulário ===== */}
-        <aside ref={propostaRef} id="proposta" className="scroll-mt-24 space-y-4 lg:sticky lg:top-20">
-          <div className="overflow-hidden rounded-2xl border-t-4 border-brand bg-white p-6 shadow-card">
-            <div className="mb-5 flex items-start justify-between">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-brand">Atendimento digital</p>
-                <h2 className="text-xl font-extrabold">Solicitar Proposta</h2>
-              </div>
-              <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand-soft text-brand">
-                <IconZap className="h-5 w-5" />
-              </span>
-            </div>
-            <ProposalForm modeloInicial={modeloEscolhido} />
-          </div>
-
-          <div className="flex items-center justify-between gap-3 rounded-2xl bg-white p-4 shadow-card">
-            <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-lg bg-green-50 text-green-600">
-                <IconMessage className="h-5 w-5" />
-              </span>
-              <div className="leading-tight">
-                <p className="text-sm font-bold">Prefere atendimento imediato?</p>
-                <p className="text-xs text-slate-500">Fale com o plantão de vendas online</p>
-              </div>
-            </div>
-            {linkAtendimentoImediato ? (
-              <a
-                href={linkAtendimentoImediato}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-1.5 rounded-lg bg-green-700 px-4 py-2 text-sm font-bold text-white transition hover:bg-green-800"
+        {/* celular: carrossel deslizável; a partir de sm: grade */}
+        <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">
+          {motosVisiveis.map((moto, i) => (
+            <article
+              key={moto.slug}
+              className="group relative flex min-w-[78%] snap-center flex-col overflow-hidden rounded-2xl border border-white/10 bg-panel p-4 transition hover:-translate-y-1 hover:border-brand/60 hover:shadow-glow sm:min-w-0"
+            >
+              <span
+                aria-hidden="true"
+                className="titulo texto-contorno pointer-events-none absolute right-3 top-1 text-7xl leading-none"
               >
-                Chamar <IconExternal className="h-4 w-4" />
-              </a>
-            ) : (
-              <button
-                type="button"
-                onClick={() => irParaProposta()}
-                className="rounded-lg bg-green-700 px-4 py-2 text-sm font-bold text-white transition hover:bg-green-800"
-              >
-                Chamar
-              </button>
-            )}
-          </div>
-        </aside>
-      </section>
-
-      {/* ===== mais procuradas ===== */}
-      <section id="modelos" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-8">
-        <div className="mb-5 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-brand">Garagem Sol Nascente</p>
-            <h2 className="text-2xl font-extrabold">Mais Procuradas da Semana</h2>
-          </div>
-          <button
-            type="button"
-            onClick={() => irParaProposta()}
-            className="hidden text-sm font-semibold text-brand hover:underline sm:block"
-          >
-            Ver todas as condições →
-          </button>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {MOTOS_DESTAQUE.map((moto) => (
-            <article key={moto.nome} className="flex flex-col rounded-2xl bg-white p-3 shadow-card">
-              <div className="relative overflow-hidden rounded-xl bg-gradient-to-b from-slate-100 to-slate-200">
-                <div className="flex items-center justify-between p-2 text-[10px] font-bold">
-                  <span className="rounded bg-ink px-2 py-0.5 text-white">{moto.selo}</span>
-                  <span className="text-green-700">{moto.situacao}</span>
-                </div>
-                <MotoArt cor={moto.cor} className="mx-auto -mt-1 h-32 w-full px-3 pb-2" />
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div className="relative flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider">
+                <span className="rounded bg-white/10 px-2 py-0.5 text-white/80">{moto.categoria}</span>
+                <span className="text-brand-soft">{moto.situacao}</span>
               </div>
-              <h3 className="mt-3 font-bold">{moto.nome}</h3>
-              <p className="mt-1 flex-1 text-xs leading-relaxed text-slate-500">{moto.descricao}</p>
-              <p className="mt-3 text-[11px] text-slate-500">Parcelas a partir de</p>
-              <p className="text-xl font-extrabold text-brand">
-                {formatarReais(moto.parcela)}
-                <span className="text-xs font-semibold text-slate-500">/mês</span>
-              </p>
+              <div className="relative my-3 grid h-36 place-items-center rounded-xl bg-gradient-to-b from-white/[0.04] to-transparent">
+                <MotoFoto
+                  slug={moto.slug}
+                  alt={moto.nome}
+                  cor={moto.cor}
+                  className="h-full w-full px-2 transition duration-300 group-hover:scale-105"
+                />
+              </div>
+              <h3 className="titulo text-2xl leading-none">{moto.nome.replace("Honda ", "")}</h3>
+              <p className="mt-2 flex-1 text-xs leading-relaxed text-white/55">{moto.descricao}</p>
+              <div className="mt-3 min-h-[44px]">
+                {moto.parcela ? (
+                  <>
+                    <p className="text-[11px] text-white/50">Parcelas a partir de</p>
+                    <p className="titulo text-3xl text-brand">
+                      {formatarReais(moto.parcela)}
+                      <span className="text-sm font-semibold not-italic text-white/50">/mês</span>
+                    </p>
+                  </>
+                ) : (
+                  <p className="pt-3 text-sm font-semibold text-white/70">Consulte as condições</p>
+                )}
+              </div>
               <button
                 type="button"
                 onClick={() => irParaProposta(moto.nome)}
-                className="mt-3 rounded-lg bg-chip py-2 text-xs font-bold text-slate-700 transition hover:bg-brand hover:text-white"
+                className="mt-3 flex items-center justify-center gap-1.5 rounded-lg border border-white/15 py-2.5 text-xs font-bold uppercase tracking-wide text-white transition group-hover:border-brand group-hover:bg-brand"
               >
-                Simular esta moto
+                Simular esta moto <IconArrowRight className="h-3.5 w-3.5" />
               </button>
             </article>
           ))}
         </div>
-        <p className="mt-3 text-[11px] text-slate-400">
+        <p className="mt-4 text-[11px] text-white/35">
           Valores ilustrativos, sujeitos a análise de crédito e disponibilidade de estoque.
         </p>
       </section>
 
-      {/* ===== unidades ===== */}
-      <section id="unidades" className="scroll-mt-16 bg-chip/70 py-12">
+      {/* ===== como funciona ===== */}
+      <section id="como-funciona" className="listras scroll-mt-16 border-y border-white/10 bg-panel/50 py-16">
         <div className="mx-auto max-w-6xl px-4">
-          <div className="mb-6 text-center">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-brand">Rede Sol Nascente</p>
-            <h2 className="text-2xl font-extrabold">Nossas Concessionárias</h2>
-            <p className="mx-auto mt-1 max-w-xl text-sm text-slate-500">
-              Estrutura completa com oficina autorizada, boutique de peças originais e test-ride disponível.
-            </p>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            {Object.values(UNIDADES).map((u) => {
-              const link = linkWhatsappUnidade(u, `Olá! Gostaria de falar com a unidade ${u.rotulo}.`);
-              const classeBotao =
-                "block w-full rounded-lg bg-chip py-2.5 text-center text-sm font-bold text-slate-700 transition hover:bg-brand hover:text-white";
-              return (
-                <article key={u.id} className="rounded-2xl bg-white p-5 shadow-card">
-                  <div className="flex items-start justify-between">
-                    <h3 className="text-lg font-bold">{u.nome}</h3>
-                    <span className="rounded bg-chip px-2 py-0.5 text-[10px] font-bold uppercase text-slate-600">
-                      {u.tipo}
-                    </span>
-                  </div>
-                  <p className="mt-3 flex items-start gap-2 text-sm text-slate-600">
-                    <IconMapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" /> {u.endereco}
-                  </p>
-                  <p className="mt-2 flex items-start gap-2 text-sm text-slate-600">
-                    <IconClock className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /> {u.horario}
-                  </p>
-                  <div className="mt-4">
-                    {link ? (
-                      <a href={link} target="_blank" rel="noreferrer" className={classeBotao}>
-                        Falar com {u.rotulo.split(" - ")[0]}
-                      </a>
-                    ) : (
-                      <button type="button" onClick={() => irParaProposta()} className={classeBotao}>
-                        Falar com {u.rotulo.split(" - ")[0]}
-                      </button>
-                    )}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+          <p className="text-[11px] font-bold uppercase tracking-widest text-brand-soft">Do clique ao test-ride</p>
+          <h2 className="titulo text-4xl sm:text-5xl">Como funciona</h2>
+          <ol className="mt-8 grid gap-4 md:grid-cols-3">
+            {ETAPAS.map((etapa, i) => (
+              <li key={etapa.titulo} className="relative rounded-2xl border border-white/10 bg-night/70 p-6">
+                <span className="titulo texto-contorno text-7xl leading-none">{String(i + 1).padStart(2, "0")}</span>
+                <h3 className="titulo mt-2 text-2xl">{etapa.titulo}</h3>
+                <p className="mt-1 text-sm text-white/60">{etapa.texto}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
-      <footer className="border-t border-slate-200 bg-white py-6">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 text-xs text-slate-500 sm:flex-row">
+      {/* ===== unidades ===== */}
+      <section id="unidades" className="mx-auto max-w-6xl scroll-mt-16 px-4 py-16">
+        <p className="text-[11px] font-bold uppercase tracking-widest text-brand-soft">Rede Sol Nascente</p>
+        <h2 className="titulo text-4xl sm:text-5xl">Nossas concessionárias</h2>
+        <p className="mt-2 max-w-xl text-sm text-white/55">
+          Estrutura completa com oficina autorizada, boutique de peças originais e test-ride disponível.
+        </p>
+
+        <div className="mt-8 grid gap-4 md:grid-cols-2">
+          {Object.values(UNIDADES).map((u) => {
+            const cidade = u.rotulo.split(" - ")[0];
+            const link = linkWhatsappUnidade(u, `Olá! Gostaria de falar com a unidade ${u.rotulo}.`);
+            const classeBotao =
+              "flex w-full items-center justify-center gap-2 rounded-lg bg-white/10 py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-brand";
+            return (
+              <article key={u.id} className="relative overflow-hidden rounded-2xl border border-white/10 bg-panel p-6">
+                <span
+                  aria-hidden="true"
+                  className="titulo texto-contorno pointer-events-none absolute -right-2 -top-3 text-8xl leading-none"
+                >
+                  {cidade}
+                </span>
+                <span className="relative rounded bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest">
+                  {u.tipo}
+                </span>
+                <h3 className="titulo relative mt-3 text-3xl">{u.nome}</h3>
+                <p className="relative mt-4 flex items-start gap-2 text-sm text-white/70">
+                  <IconMapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" /> {u.endereco}
+                </p>
+                <p className="relative mt-2 flex items-start gap-2 text-sm text-white/70">
+                  <IconClock className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" /> {u.horario}
+                </p>
+                <div className="relative mt-5">
+                  {link ? (
+                    <a href={link} target="_blank" rel="noreferrer" className={classeBotao}>
+                      <IconMessage className="h-4 w-4" /> Falar com {cidade}
+                    </a>
+                  ) : (
+                    <button type="button" onClick={() => irParaProposta()} className={classeBotao}>
+                      <IconMessage className="h-4 w-4" /> Falar com {cidade}
+                    </button>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <footer className="border-t border-white/10 py-8">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 text-xs text-white/45 sm:flex-row">
           <Logo />
           <p>© {new Date().getFullYear()} Sol Nascente Motos Honda. Todos os direitos reservados.</p>
         </div>
       </footer>
+
+      {/* ===== botão flutuante de WhatsApp ===== */}
+      {linkPlantao ? (
+        <a
+          href={linkPlantao}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Falar no WhatsApp"
+          className="fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full bg-emerald-500 text-white shadow-lg transition hover:scale-105 hover:bg-emerald-400"
+        >
+          <IconMessage className="h-7 w-7" />
+        </a>
+      ) : (
+        <button
+          type="button"
+          onClick={() => irParaProposta()}
+          aria-label="Solicitar proposta"
+          className="fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full bg-brand text-white shadow-glow transition hover:scale-105 hover:bg-brand-soft"
+        >
+          <IconMessage className="h-7 w-7" />
+        </button>
+      )}
     </div>
   );
 }

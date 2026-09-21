@@ -5,19 +5,21 @@ export default {
     extend: {
       colors: {
         brand: {
-          DEFAULT: "#C8102E",
-          dark: "#9B0D24",
-          soft: "#FDECEF",
+          DEFAULT: "#E10A2B",
+          dark: "#A80720",
+          soft: "#FF3B57",
         },
-        surface: "#F4F6FB",
-        chip: "#E9EDF7",
-        ink: "#0F172A",
+        night: "#0A0A0D",
+        panel: "#131318",
+        panel2: "#1B1B22",
       },
       fontFamily: {
         sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["Barlow Condensed", "Inter", "ui-sans-serif", "sans-serif"],
       },
       boxShadow: {
-        card: "0 1px 2px rgba(15, 23, 42, 0.05), 0 4px 16px rgba(15, 23, 42, 0.05)",
+        glow: "0 0 60px rgba(225, 10, 43, 0.22)",
+        card: "0 8px 30px rgba(0, 0, 0, 0.45)",
       },
     },
   },
