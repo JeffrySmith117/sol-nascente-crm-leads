@@ -133,12 +133,18 @@ export default function Landing() {
             >
               0 km
             </span>
-            <MotoFoto
-              slug="hero"
-              alt="Moto Honda zero quilômetro"
-              cor="#E10A2B"
-              className="relative w-full max-w-xl drop-shadow-[0_24px_40px_rgba(225,10,43,0.35)] lg:ml-auto"
-            />
+            {/* palco claro em paralelogramo: a foto (fundo branco) se mistura a ele */}
+            <div className="relative max-w-xl drop-shadow-[0_24px_40px_rgba(225,10,43,0.35)] lg:ml-auto">
+              <div className="bg-gradient-to-br from-white via-slate-100 to-slate-300 [clip-path:polygon(7%_0,100%_0,93%_100%,0_100%)]">
+                <MotoFoto
+                  slug="hero"
+                  alt="Moto esportiva Honda zero quilômetro"
+                  cor="#E10A2B"
+                  mesclar={false}
+                  className="aspect-[4/3] w-full"
+                />
+              </div>
+            </div>
             <div className="absolute -bottom-2 left-0 flex items-center gap-2 rounded-xl border border-white/10 bg-panel/90 px-3 py-2 backdrop-blur sm:left-4">
               <IconShieldCheck className="h-6 w-6 text-brand" />
               <div className="leading-tight">
@@ -238,7 +244,7 @@ export default function Landing() {
                 <span className="rounded bg-white/10 px-2 py-0.5 text-white/80">{moto.categoria}</span>
                 <span className="text-brand-soft">{moto.situacao}</span>
               </div>
-              <div className="relative my-3 grid h-36 place-items-center rounded-xl bg-gradient-to-b from-white/[0.04] to-transparent">
+              <div className="relative my-3 grid h-36 place-items-center overflow-hidden rounded-xl bg-gradient-to-b from-white to-slate-200">
                 <MotoFoto
                   slug={moto.slug}
                   alt={moto.nome}
