@@ -102,7 +102,7 @@ export default function ProposalForm({ modeloInicial = "" }: ProposalFormProps) 
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="grid gap-4 md:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1.15fr_0.85fr_auto]"
+      className="grid gap-4 md:grid-cols-2 xl:grid-cols-[1.25fr_1fr_1.15fr_0.85fr_auto]"
     >
       <div>
         <label htmlFor="pf-nome" className={ROTULO}>
@@ -185,7 +185,7 @@ export default function ProposalForm({ modeloInicial = "" }: ProposalFormProps) 
       <button
         type="submit"
         disabled={enviando}
-        className="flex items-center justify-center gap-2 rounded-lg bg-brand px-6 py-3 text-sm font-bold uppercase tracking-wide text-white shadow-glow transition hover:bg-brand-soft disabled:cursor-wait disabled:opacity-70 md:col-span-2 lg:col-span-1 lg:mt-[21px] lg:h-[46px]"
+        className="flex items-center justify-center gap-2 rounded-lg bg-brand px-6 py-3 text-sm font-bold uppercase tracking-wide text-white shadow-glow transition hover:bg-brand-soft disabled:cursor-wait disabled:opacity-70 md:col-span-2 xl:col-span-1 xl:mt-[21px] xl:h-[46px]"
       >
         {enviando ? (
           "Enviando..."
@@ -198,7 +198,7 @@ export default function ProposalForm({ modeloInicial = "" }: ProposalFormProps) 
 
       {aviso && (
         <p
-          className="rounded-lg bg-amber-500/10 px-3 py-2 text-xs font-medium text-amber-300 md:col-span-2 lg:col-span-full"
+          className="rounded-lg bg-amber-500/10 px-3 py-2 text-xs font-medium text-amber-300 md:col-span-2 xl:col-span-full"
           role="status"
         >
           {aviso}
@@ -206,14 +206,14 @@ export default function ProposalForm({ modeloInicial = "" }: ProposalFormProps) 
       )}
       {erroGeral && (
         <p
-          className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300 md:col-span-2 lg:col-span-full"
+          className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300 md:col-span-2 xl:col-span-full"
           role="alert"
         >
           {erroGeral}
         </p>
       )}
 
-      <p className="flex items-center gap-1.5 text-[11px] text-white/45 md:col-span-2 lg:col-span-full">
+      <p className="flex items-center gap-1.5 text-[11px] text-white/45 md:col-span-2 xl:col-span-full">
         <IconLock className="h-3 w-3" /> Seus dados estão protegidos pela LGPD e só são usados para o atendimento.
       </p>
     </form>
