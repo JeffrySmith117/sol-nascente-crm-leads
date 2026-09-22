@@ -9,9 +9,12 @@ export default {
           dark: "#A80720",
           soft: "#FF3B57",
         },
-        night: "#0A0A0D",
-        panel: "#131318",
-        panel2: "#1B1B22",
+        // essas quatro seguem uma variável CSS (ver index.css): o mesmo nome de classe
+        // (bg-night, text-ink/60...) muda de cor sozinho quando a landing troca de tema
+        night: "rgb(var(--sn-surface) / <alpha-value>)",
+        panel: "rgb(var(--sn-panel) / <alpha-value>)",
+        panel2: "rgb(var(--sn-panel-2) / <alpha-value>)",
+        ink: "rgb(var(--sn-ink) / <alpha-value>)",
       },
       fontFamily: {
         sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
