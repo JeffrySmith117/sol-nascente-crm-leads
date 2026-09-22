@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { api } from "../api/client";
 import { IconLock, IconUser } from "../components/Icons";
 import Logo from "../components/Logo";
-import { MarcaDagua, Mascote } from "../components/Marca";
+import { MarcaDagua } from "../components/Marca";
 import type { TokenResponse } from "../types";
 
 export default function Login() {
@@ -40,16 +40,9 @@ export default function Login() {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-1.5 bg-brand" />
 
       <div className="relative z-10 mx-auto grid min-h-screen max-w-5xl items-center gap-8 px-4 py-10 lg:grid-cols-2">
-        {/* mascote (só aparece quando /public/marca/mascote.* existir) */}
-        <div className="hidden justify-center lg:flex">
-          <Mascote className="max-h-[520px] w-auto object-contain drop-shadow-2xl" />
-        </div>
+        <div className="hidden justify-center lg:flex" />
 
         <div className="mx-auto w-full max-w-sm">
-          {/* celular: mascote menor acima do formulário */}
-          <div className="mb-3 flex justify-center lg:hidden">
-            <Mascote className="max-h-32 w-auto object-contain" />
-          </div>
           <div className="mb-6 flex justify-center lg:justify-start">
             <Logo tema="claro" imagem />
           </div>
