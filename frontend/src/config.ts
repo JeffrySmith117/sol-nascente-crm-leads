@@ -149,6 +149,7 @@ export const MOTOS: Moto[] = [
     categoria: "Trail",
     situacao: "Sob consulta",
     descricao: "Big trail de 500 cc: conforto para viagens longas e pegada de aventura.",
+    parcela: 960,
     cor: "#94A3B8",
   },
   {
