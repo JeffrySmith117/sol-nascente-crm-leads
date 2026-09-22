@@ -23,17 +23,27 @@ export function Mascote({ className }: { className?: string }) {
   return <ImagemMarca caminho="/marca/mascote" alt="Mascote da Sol Nascente Motos" className={className} />;
 }
 
-// nome da loja gigante e bem clarinho, usado como marca d'água no fundo das telas administrativas.
-// É texto (não a logo esticada): a logo tem fundo sólido e vira um retângulo feio nesse tamanho.
+// marca d'água do fundo das telas administrativas: a mesma logo da loja, mas recortada do fundo
+// vermelho sólido (que viraria um retângulo feio nesse tamanho) — só o círculo e o nome, em
+// vermelho, sobre fundo transparente. Ver /public/marca/LEIA-ME.md para gerar esse arquivo.
 export function MarcaDagua() {
   return (
     <div
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 z-0 grid select-none place-items-center overflow-hidden"
     >
-      <p className="titulo whitespace-nowrap text-center text-[18vw] leading-none text-brand opacity-[0.08] sm:text-[13vw]">
-        Sol Nascente
-      </p>
+      <div className="w-[70vw] max-w-xl opacity-[0.09] sm:w-[45vw]">
+        <ImagemMarca
+          caminho="/marca/logo-marca-dagua"
+          alt=""
+          className="w-full"
+          fallback={
+            <p className="titulo whitespace-nowrap text-center text-[18vw] leading-none text-brand sm:text-[13vw]">
+              Sol Nascente
+            </p>
+          }
+        />
+      </div>
     </div>
   );
 }
