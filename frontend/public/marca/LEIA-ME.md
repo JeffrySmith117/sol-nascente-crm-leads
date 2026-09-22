@@ -7,7 +7,3 @@
   como marca d'água atrás do painel administrativo (a logo.webp normal ficaria com um
   retângulo vermelho feio nesse tamanho). Se a loja mandar uma versão oficial já em PNG
   transparente, é só substituir este arquivo.
-- `mascote.png` (ou `.webp`/`.jpg`/`.svg`): ainda falta. Aparece no banner do painel
-  administrativo e na tela de login. Prefira PNG com fundo transparente.
-
-Enquanto o mascote nao existir, essa tela simplesmente nao o mostra.

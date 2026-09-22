@@ -18,11 +18,6 @@ export function ImagemMarca({ caminho, alt, className, fallback = null }: Imagem
   return <img src={src} alt={alt} decoding="async" className={className} />;
 }
 
-// foto do mascote (o "boneco motoqueiro"): /public/marca/mascote.(png|webp|jpg|svg)
-export function Mascote({ className }: { className?: string }) {
-  return <ImagemMarca caminho="/marca/mascote" alt="Mascote da Sol Nascente Motos" className={className} />;
-}
-
 // marca d'água do fundo das telas administrativas: a mesma logo da loja, mas recortada do fundo
 // vermelho sólido (que viraria um retângulo feio nesse tamanho) — só o círculo e o nome, em
 // vermelho, sobre fundo transparente. Ver /public/marca/LEIA-ME.md para gerar esse arquivo.

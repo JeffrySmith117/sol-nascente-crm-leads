@@ -15,7 +15,7 @@ import {
   IconSearch,
 } from "../components/Icons";
 import Logo from "../components/Logo";
-import { MarcaDagua, Mascote } from "../components/Marca";
+import { MarcaDagua } from "../components/Marca";
 import { UNIDADES } from "../config";
 import { formatarDataHora, iniciais, linkWhatsapp, mascararTelefone, mesmoDia } from "../lib/format";
 import type { Lead, StatusLead, Unidade } from "../types";
@@ -407,9 +407,9 @@ export default function LeadsPanel() {
       </header>
 
       <main className="relative z-10 mx-auto max-w-7xl space-y-5 px-4 py-6">
-        {/* ===== boas-vindas com o mascote ===== */}
+        {/* ===== boas-vindas ===== */}
         <section className="listras relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand-dark via-brand to-brand-soft px-6 py-6 text-white shadow-md sm:px-8">
-          <div className="relative z-10 max-w-xl pr-28 sm:pr-40">
+          <div className="relative z-10 max-w-xl">
             <p className="text-[11px] font-bold uppercase tracking-widest text-white/80">Central de atendimento</p>
             <h1 className="titulo text-4xl sm:text-5xl">Olá, {primeiroNome}!</h1>
             <p className="mt-1 text-sm text-white/90">
@@ -419,7 +419,6 @@ export default function LeadsPanel() {
               {hoje > 0 && ` Hoje já chegaram ${hoje}.`}
             </p>
           </div>
-          <Mascote className="absolute bottom-0 right-3 h-36 w-auto object-contain drop-shadow-xl sm:right-8 sm:h-44" />
         </section>
 
         {/* ===== indicadores ===== */}
