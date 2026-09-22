@@ -5,10 +5,12 @@ import {
   IconArrowRight,
   IconClock,
   IconLock,
+  IconLua,
   IconMapPin,
   IconMessage,
   IconPhoneCall,
   IconShieldCheck,
+  IconSol,
 } from "../components/Icons";
 import Logo from "../components/Logo";
 import MotoFoto from "../components/MotoFoto";
@@ -17,11 +19,35 @@ import { abertaAgora, CATEGORIAS, linkLigarUnidade, linkMapaUnidade, linkWhatsap
 import type { Categoria } from "../config";
 import { formatarReais } from "../lib/format";
 
+type Tema = "escuro" | "claro";
+const CHAVE_TEMA = "sn-landing-tema";
+
+function lerTemaSalvo(): Tema {
+  try {
+    return localStorage.getItem(CHAVE_TEMA) === "claro" ? "claro" : "escuro";
+  } catch {
+    return "escuro"; // navegador sem acesso ao storage (aba anônima etc.): usa o padrão
+  }
+}
+
 export default function Landing() {
   const [modeloEscolhido, setModeloEscolhido] = useState("");
   const [categoria, setCategoria] = useState<Categoria | "Todas">("Todas");
   const [agora, setAgora] = useState(() => new Date());
+  const [tema, setTema] = useState<Tema>(lerTemaSalvo);
   const propostaRef = useRef<HTMLElement>(null);
+
+  function trocarTema() {
+    setTema((atual) => {
+      const novo = atual === "escuro" ? "claro" : "escuro";
+      try {
+        localStorage.setItem(CHAVE_TEMA, novo);
+      } catch {
+        /* preferência é só conveniência: sem storage, só não persiste entre visitas */
+      }
+      return novo;
+    });
+  }
 
   // começa a acordar o backend (plano gratuito do Render) enquanto a pessoa lê a página
   useEffect(() => {
@@ -47,34 +73,45 @@ export default function Landing() {
   const linkPlantao = linkWhatsappUnidade(UNIDADES.TERESINA, "Olá! Gostaria de atendimento sobre motos Honda.");
 
   return (
-    <div className="min-h-screen overflow-x-clip bg-night">
+    <div
+      className={`min-h-screen overflow-x-clip bg-night text-ink ${tema === "claro" ? "tema-claro-landing" : ""}`}
+    >
       {/* ===== navbar ===== */}
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-night/85 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-ink/10 bg-night/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
           <Link to="/" aria-label="Sol Nascente Motos Honda">
             <Logo imagem />
           </Link>
-          <nav className="hidden items-center gap-7 whitespace-nowrap text-sm font-medium text-white/70 md:flex">
-            <a href="#modelos" className="transition hover:text-white">
+          <nav className="hidden items-center gap-7 whitespace-nowrap text-sm font-medium text-ink/70 md:flex">
+            <a href="#modelos" className="transition hover:text-ink">
               Modelos
             </a>
-            <a href="#unidades" className="transition hover:text-white">
+            <a href="#unidades" className="transition hover:text-ink">
               Unidades
             </a>
           </nav>
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => trocarTema()}
+              aria-label={tema === "escuro" ? "Ativar tema claro" : "Ativar tema escuro"}
+              title={tema === "escuro" ? "Ativar tema claro" : "Ativar tema escuro"}
+              className="grid h-9 w-9 place-items-center rounded-lg border border-ink/15 text-ink/75 transition hover:border-brand hover:text-ink"
+            >
+              {tema === "escuro" ? <IconSol className="h-4 w-4" /> : <IconLua className="h-4 w-4" />}
+            </button>
             {/* celular e tablet: só o cadeado (economiza espaço); a partir de lg: com o texto */}
             <Link
               to="/login"
               aria-label="Área administrativa"
               title="Área administrativa"
-              className="grid h-9 w-9 place-items-center rounded-lg border border-white/15 text-white/75 transition hover:border-brand hover:text-white lg:hidden"
+              className="grid h-9 w-9 place-items-center rounded-lg border border-ink/15 text-ink/75 transition hover:border-brand hover:text-ink lg:hidden"
             >
               <IconLock className="h-4 w-4" />
             </Link>
             <Link
               to="/login"
-              className="hidden items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-xs font-semibold text-white/60 transition hover:text-white lg:flex"
+              className="hidden items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-xs font-semibold text-ink/60 transition hover:text-ink lg:flex"
             >
               <IconLock className="h-3.5 w-3.5" /> Área administrativa
             </Link>
@@ -106,7 +143,7 @@ export default function Landing() {
               <br />
               <span className="text-brand">Honda</span> zero km
             </h1>
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-white/65">
+            <p className="mt-5 max-w-lg text-base leading-relaxed text-ink/65">
               Entrada facilitada e parcelas que cabem no seu bolso. Deixe seus dados e um consultor oficial chama
               você no WhatsApp com a simulação pronta.
             </p>
@@ -120,7 +157,7 @@ export default function Landing() {
               </button>
               <a
                 href="#modelos"
-                className="rounded-lg border border-white/20 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-white transition hover:border-white/50"
+                className="rounded-lg border border-ink/20 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-ink transition hover:border-ink/50"
               >
                 Ver modelos
               </a>
@@ -146,11 +183,11 @@ export default function Landing() {
                 />
               </div>
             </div>
-            <div className="absolute -bottom-2 left-0 flex items-center gap-2 rounded-xl border border-white/10 bg-panel/90 px-3 py-2 backdrop-blur sm:left-4">
+            <div className="absolute -bottom-2 left-0 flex items-center gap-2 rounded-xl border border-ink/10 bg-panel/90 px-3 py-2 backdrop-blur sm:left-4">
               <IconShieldCheck className="h-6 w-6 text-brand" />
               <div className="leading-tight">
                 <p className="titulo text-xl">3 anos</p>
-                <p className="text-[10px] text-white/55">de garantia Honda</p>
+                <p className="text-[10px] text-ink/55">de garantia Honda</p>
               </div>
             </div>
             <span className="absolute right-0 top-14 -skew-x-6 rounded bg-brand px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-white sm:right-4">
@@ -166,7 +203,7 @@ export default function Landing() {
         id="proposta"
         className="relative z-10 mx-auto -mt-16 max-w-6xl scroll-mt-24 px-4 lg:-mt-20"
       >
-        <div className="overflow-hidden rounded-2xl border border-white/10 border-t-brand bg-panel p-5 shadow-card sm:p-6 [border-top-width:3px]">
+        <div className="overflow-hidden rounded-2xl border border-ink/10 border-t-brand bg-panel p-5 shadow-card sm:p-6 [border-top-width:3px]">
           <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-widest text-brand-soft">
@@ -207,7 +244,7 @@ export default function Landing() {
                 className={`rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wide transition ${
                   categoria === c
                     ? "bg-brand text-white"
-                    : "border border-white/15 text-white/65 hover:border-white/40 hover:text-white"
+                    : "border border-ink/15 text-ink/65 hover:border-ink/40 hover:text-ink"
                 }`}
               >
                 {c}
@@ -221,10 +258,10 @@ export default function Landing() {
           {motosVisiveis.map((moto) => (
             <article
               key={moto.slug}
-              className="group relative flex min-w-[78%] snap-center flex-col overflow-hidden rounded-2xl border border-white/10 bg-panel p-4 transition hover:-translate-y-1 hover:border-brand/60 hover:shadow-glow sm:min-w-0"
+              className="group relative flex min-w-[78%] snap-center flex-col overflow-hidden rounded-2xl border border-ink/10 bg-panel p-4 transition hover:-translate-y-1 hover:border-brand/60 hover:shadow-glow sm:min-w-0"
             >
               <div className="relative flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider">
-                <span className="rounded bg-white/10 px-2 py-0.5 text-white/80">{moto.categoria}</span>
+                <span className="rounded bg-ink/10 px-2 py-0.5 text-ink/80">{moto.categoria}</span>
                 <span className="text-brand-soft">{moto.situacao}</span>
               </div>
               <div className="relative my-3 grid h-36 place-items-center overflow-hidden rounded-xl bg-gradient-to-b from-white to-slate-200">
@@ -236,31 +273,31 @@ export default function Landing() {
                 />
               </div>
               <h3 className="titulo text-2xl leading-none">{moto.nome.replace("Honda ", "")}</h3>
-              <p className="mt-2 flex-1 text-xs leading-relaxed text-white/55">{moto.descricao}</p>
+              <p className="mt-2 flex-1 text-xs leading-relaxed text-ink/55">{moto.descricao}</p>
               <div className="mt-3 min-h-[44px]">
                 {moto.parcela ? (
                   <>
-                    <p className="text-[11px] text-white/50">Parcelas a partir de</p>
+                    <p className="text-[11px] text-ink/50">Parcelas a partir de</p>
                     <p className="titulo text-3xl text-brand">
                       {formatarReais(moto.parcela)}
-                      <span className="text-sm font-semibold not-italic text-white/50">/mês</span>
+                      <span className="text-sm font-semibold not-italic text-ink/50">/mês</span>
                     </p>
                   </>
                 ) : (
-                  <p className="pt-3 text-sm font-semibold text-white/70">Consulte as condições</p>
+                  <p className="pt-3 text-sm font-semibold text-ink/70">Consulte as condições</p>
                 )}
               </div>
               <button
                 type="button"
                 onClick={() => irParaProposta(moto.nome)}
-                className="mt-3 flex items-center justify-center gap-1.5 rounded-lg border border-white/15 py-2.5 text-xs font-bold uppercase tracking-wide text-white transition group-hover:border-brand group-hover:bg-brand"
+                className="mt-3 flex items-center justify-center gap-1.5 rounded-lg border border-ink/15 py-2.5 text-xs font-bold uppercase tracking-wide text-ink transition group-hover:border-brand group-hover:bg-brand group-hover:text-white"
               >
                 Simular esta moto <IconArrowRight className="h-3.5 w-3.5" />
               </button>
             </article>
           ))}
         </div>
-        <p className="mt-4 text-[11px] text-white/35">
+        <p className="mt-4 text-[11px] text-ink/35">
           Valores ilustrativos, sujeitos a análise de crédito e disponibilidade de estoque.
         </p>
       </section>
@@ -269,7 +306,7 @@ export default function Landing() {
       <section id="unidades" className="mx-auto max-w-6xl scroll-mt-16 px-4 py-16">
         <p className="text-[11px] font-bold uppercase tracking-widest text-brand-soft">Rede Sol Nascente</p>
         <h2 className="titulo text-4xl sm:text-5xl">Nossas concessionárias</h2>
-        <p className="mt-2 max-w-xl text-sm text-white/55">
+        <p className="mt-2 max-w-xl text-sm text-ink/55">
           Estrutura completa com oficina autorizada, boutique de peças originais e test-ride disponível.
         </p>
 
@@ -279,9 +316,9 @@ export default function Landing() {
             const aberta = abertaAgora(u, agora);
             const linkZap = linkWhatsappUnidade(u, `Olá! Gostaria de falar com a unidade ${u.rotulo}.`);
             const classeBotaoPrincipal =
-              "flex flex-1 items-center justify-center gap-2 rounded-lg bg-white/10 py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-brand";
+              "flex flex-1 items-center justify-center gap-2 rounded-lg bg-ink/10 py-3 text-sm font-bold uppercase tracking-wide text-ink transition hover:bg-brand hover:text-white";
             return (
-              <article key={u.id} className="relative overflow-hidden rounded-2xl border border-white/10 bg-panel p-6">
+              <article key={u.id} className="relative overflow-hidden rounded-2xl border border-ink/10 bg-panel p-6">
                 <span
                   aria-hidden="true"
                   className="titulo texto-contorno pointer-events-none absolute -right-2 -top-3 text-8xl leading-none"
@@ -295,10 +332,10 @@ export default function Landing() {
                   </span>
                   <span
                     className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest ${
-                      aberta ? "bg-emerald-500/15 text-emerald-400" : "bg-white/10 text-white/50"
+                      aberta ? "bg-emerald-500/15 text-emerald-400" : "bg-ink/10 text-ink/50"
                     }`}
                   >
-                    <span className={`h-1.5 w-1.5 rounded-full ${aberta ? "bg-emerald-400" : "bg-white/40"}`} />
+                    <span className={`h-1.5 w-1.5 rounded-full ${aberta ? "bg-emerald-400" : "bg-ink/40"}`} />
                     {aberta ? "Aberto agora" : "Fechado agora"}
                   </span>
                 </div>
@@ -309,12 +346,12 @@ export default function Landing() {
                   href={linkMapaUnidade(u)}
                   target="_blank"
                   rel="noreferrer"
-                  className="relative mt-4 flex items-start gap-2 text-sm text-white/70 transition hover:text-white"
+                  className="relative mt-4 flex items-start gap-2 text-sm text-ink/70 transition hover:text-ink"
                 >
                   <IconMapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
-                  <span className="underline decoration-white/20 underline-offset-2">{u.endereco}</span>
+                  <span className="underline decoration-ink/20 underline-offset-2">{u.endereco}</span>
                 </a>
-                <p className="relative mt-2 flex items-start gap-2 text-sm text-white/70">
+                <p className="relative mt-2 flex items-start gap-2 text-sm text-ink/70">
                   <IconClock className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" /> {u.horario}
                 </p>
 
@@ -338,14 +375,14 @@ export default function Landing() {
         </div>
       </section>
 
-      <footer className="border-t border-white/10 py-8">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 text-xs text-white/45 sm:flex-row">
+      <footer className="border-t border-ink/10 py-8">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 text-xs text-ink/45 sm:flex-row">
           <Logo imagem />
           <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-5">
             <p>© {new Date().getFullYear()} Sol Nascente Motos Honda. Todos os direitos reservados.</p>
             <Link
               to="/login"
-              className="inline-flex items-center gap-1.5 font-semibold text-white/60 transition hover:text-white"
+              className="inline-flex items-center gap-1.5 font-semibold text-ink/60 transition hover:text-ink"
             >
               <IconLock className="h-3.5 w-3.5" /> Área administrativa
             </Link>

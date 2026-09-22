@@ -7,13 +7,36 @@ html {
   color-scheme: dark;
 }
 
+/* tema da landing pública: o visitante escolhe, e fica salvo no navegador dele.
+   .tema-claro-landing troca só estas variáveis; o resto do site (telas administrativas,
+   que já usam a classe separada .tema-claro) não é afetado. */
+:root {
+  --sn-surface: 10 10 13;
+  --sn-panel: 19 19 24;
+  --sn-panel-2: 27 27 34;
+  --sn-ink: 255 255 255;
+  --sn-contorno: 255 255 255;
+  --sn-select-bg: 19 19 24;
+  --sn-select-fg: 255 255 255;
+}
+
+.tema-claro-landing {
+  --sn-surface: 248 250 252;
+  --sn-panel: 255 255 255;
+  --sn-panel-2: 241 245 249;
+  --sn-ink: 15 23 42;
+  --sn-contorno: 15 23 42;
+  --sn-select-bg: 255 255 255;
+  --sn-select-fg: 15 23 42;
+}
+
 body {
   @apply bg-night font-sans text-white antialiased;
 }
 
 select option {
-  background: #131318;
-  color: #fff;
+  background: rgb(var(--sn-select-bg));
+  color: rgb(var(--sn-select-fg));
 }
 
 /* telas administrativas: fundo branco, com a logo da loja como marca d'água */
@@ -32,7 +55,7 @@ select option {
     @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand focus:ring-2 focus:ring-brand/20;
   }
   .campo {
-    @apply w-full rounded-lg border border-white/10 bg-white/5 px-3 py-3 text-sm text-white outline-none transition placeholder:text-white/40 focus:border-brand focus:ring-2 focus:ring-brand/30;
+    @apply w-full rounded-lg border border-ink/10 bg-ink/5 px-3 py-3 text-sm text-ink outline-none transition placeholder:text-ink/40 focus:border-brand focus:ring-2 focus:ring-brand/30;
   }
   .campo-erro {
     @apply border-red-500 focus:border-red-500 focus:ring-red-500/30;
@@ -41,7 +64,7 @@ select option {
     @apply font-display font-extrabold uppercase italic tracking-tight;
   }
   .texto-contorno {
-    -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.14);
+    -webkit-text-stroke: 1.5px rgb(var(--sn-contorno) / 0.14);
     color: transparent;
   }
   .listras {

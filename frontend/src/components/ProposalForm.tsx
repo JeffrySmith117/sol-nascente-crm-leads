@@ -12,7 +12,7 @@ interface ProposalFormProps {
 
 type Erros = Partial<Record<"nome" | "whatsapp" | "modelo", string>>;
 
-const ROTULO = "mb-1 block text-[11px] font-semibold uppercase tracking-wider text-white/60";
+const ROTULO = "mb-1 block text-[11px] font-semibold uppercase tracking-wider text-ink/60";
 
 export default function ProposalForm({ modeloInicial = "" }: ProposalFormProps) {
   const [nome, setNome] = useState("");
@@ -83,14 +83,14 @@ export default function ProposalForm({ modeloInicial = "" }: ProposalFormProps) 
         </span>
         <div className="flex-1">
           <h3 className="titulo text-2xl">Recebemos sua solicitação!</h3>
-          <p className="text-sm text-white/60">
+          <p className="text-sm text-ink/60">
             Um consultor da Sol Nascente vai falar com você pelo WhatsApp em poucos minutos.
           </p>
         </div>
         <button
           type="button"
           onClick={() => setEnviado(false)}
-          className="rounded-lg border border-white/15 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-brand hover:text-brand"
+          className="rounded-lg border border-ink/15 px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-brand hover:text-brand"
         >
           Solicitar outra proposta
         </button>
@@ -109,7 +109,7 @@ export default function ProposalForm({ modeloInicial = "" }: ProposalFormProps) 
           Nome completo
         </label>
         <div className="relative">
-          <IconUser className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+          <IconUser className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/40" />
           <input
             id="pf-nome"
             className={`campo pl-9 ${erros.nome ? "campo-erro" : ""}`}
@@ -128,7 +128,7 @@ export default function ProposalForm({ modeloInicial = "" }: ProposalFormProps) 
           WhatsApp
         </label>
         <div className="relative">
-          <IconSmartphone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+          <IconSmartphone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/40" />
           <input
             id="pf-whatsapp"
             className={`campo pl-9 ${erros.whatsapp ? "campo-erro" : ""}`}
@@ -149,7 +149,7 @@ export default function ProposalForm({ modeloInicial = "" }: ProposalFormProps) 
         </label>
         <select
           id="pf-modelo"
-          className={`campo ${erros.modelo ? "campo-erro" : ""} ${modelo ? "" : "text-white/40"}`}
+          className={`campo ${erros.modelo ? "campo-erro" : ""} ${modelo ? "" : "text-ink/40"}`}
           value={modelo}
           onChange={(e) => setModelo(e.target.value)}
           aria-invalid={!!erros.modelo}
@@ -213,7 +213,7 @@ export default function ProposalForm({ modeloInicial = "" }: ProposalFormProps) 
         </p>
       )}
 
-      <p className="flex items-center gap-1.5 text-[11px] text-white/45 md:col-span-2 xl:col-span-full">
+      <p className="flex items-center gap-1.5 text-[11px] text-ink/45 md:col-span-2 xl:col-span-full">
         <IconLock className="h-3 w-3" /> Seus dados estão protegidos pela LGPD e só são usados para o atendimento.
       </p>
     </form>
