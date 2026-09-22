@@ -7,10 +7,15 @@ export interface UnidadeInfo {
   tipo: "Matriz" | "Filial";
   endereco: string;
   horario: string;
-  // número no formato DDI+DDD+número (ex.: 5586912345678), vindo do ambiente. Se não estiver
-  // configurado, os botões de WhatsApp levam para o formulário em vez de abrir uma conversa.
+  // número no formato DDI+DDD+número (ex.: 5586912345678). Um valor padrão já fica aqui no
+  // código (números públicos da loja); definir VITE_WHATSAPP_TERESINA/VITE_WHATSAPP_TIMON no
+  // ambiente sobrescreve sem precisar mexer no código.
   whatsapp: string;
 }
+
+// (86) 2106-6500 e (99) 3118-6500 — telefones informados pela loja
+const WHATSAPP_TERESINA_PADRAO = "558621066500";
+const WHATSAPP_TIMON_PADRAO = "559931186500";
 
 export const UNIDADES: Record<Unidade, UnidadeInfo> = {
   TERESINA: {
@@ -20,7 +25,7 @@ export const UNIDADES: Record<Unidade, UnidadeInfo> = {
     tipo: "Matriz",
     endereco: "Av. Frei Serafim, 2800 — Centro, Teresina - PI",
     horario: "Seg à Sex: 08:00 às 18:00 | Sáb: 08:00 às 12:00",
-    whatsapp: import.meta.env.VITE_WHATSAPP_TERESINA ?? "",
+    whatsapp: import.meta.env.VITE_WHATSAPP_TERESINA ?? WHATSAPP_TERESINA_PADRAO,
   },
   TIMON: {
     id: "TIMON",
@@ -29,7 +34,7 @@ export const UNIDADES: Record<Unidade, UnidadeInfo> = {
     tipo: "Filial",
     endereco: "Av. Presidente Médici, 1420 — Formosa, Timon - MA",
     horario: "Seg à Sex: 08:00 às 18:00 | Sáb: 08:00 às 12:00",
-    whatsapp: import.meta.env.VITE_WHATSAPP_TIMON ?? "",
+    whatsapp: import.meta.env.VITE_WHATSAPP_TIMON ?? WHATSAPP_TIMON_PADRAO,
   },
 };
 
