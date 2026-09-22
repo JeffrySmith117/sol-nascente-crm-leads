@@ -46,7 +46,7 @@ export const UNIDADES: Record<Unidade, UnidadeInfo> = {
   },
 };
 
-export type Categoria = "Urbanas" | "Scooter" | "Trail" | "Naked";
+export type Categoria = "Urbanas" | "Scooter" | "Trail" | "Naked" | "Sport";
 
 export interface Moto {
   slug: string; // nome do arquivo da foto em /public/motos/<slug>.webp (ou .png/.jpg)
@@ -89,6 +89,7 @@ export const MOTOS: Moto[] = [
     categoria: "Urbanas",
     situacao: "Em estoque",
     descricao: "Porta de entrada da linha: leve, econômica e ideal para o dia a dia.",
+    parcela: 389.12,
     cor: "#2563EB",
   },
   {
@@ -98,6 +99,7 @@ export const MOTOS: Moto[] = [
     categoria: "Scooter",
     situacao: "Em estoque",
     descricao: "Scooter premium com conforto, painel digital e ótima autonomia.",
+    parcela: 360,
     cor: "#92400E",
   },
   {
@@ -117,6 +119,7 @@ export const MOTOS: Moto[] = [
     categoria: "Trail",
     situacao: "Em estoque",
     descricao: "Trail 300 cc com visual de competição e suspensão de longo curso.",
+    parcela: 568.04,
     cor: "#B91C1C",
   },
   {
@@ -126,6 +129,7 @@ export const MOTOS: Moto[] = [
     categoria: "Trail",
     situacao: "Em estoque",
     descricao: "Trail versátil para cidade e estrada, com posição de pilotagem alta e confortável.",
+    parcela: 420,
     cor: "#64748B",
   },
   {
@@ -135,6 +139,7 @@ export const MOTOS: Moto[] = [
     categoria: "Trail",
     situacao: "Em estoque",
     descricao: "Aventura de verdade: motor 300 cc, rodas raiadas e postura de trail.",
+    parcela: 820,
     cor: "#B91C1C",
   },
   {
@@ -156,9 +161,20 @@ export const MOTOS: Moto[] = [
     parcela: 549,
     cor: "#1E3A8A",
   },
+  {
+    // TODO: confirmar com a loja o nome exato desta versão da CBR (assumido CBR 650R pela foto)
+    slug: "cbr-650r",
+    nome: "Honda CBR 650R",
+    selo: "CBR 650R",
+    categoria: "Sport",
+    situacao: "Sob consulta",
+    descricao: "Esportiva de alta performance, com motor bicilíndrico e freios de série.",
+    parcela: 1075,
+    cor: "#DC2626",
+  },
 ];
 
-export const CATEGORIAS: Array<Categoria | "Todas"> = ["Todas", "Urbanas", "Scooter", "Trail", "Naked"];
+export const CATEGORIAS: Array<Categoria | "Todas"> = ["Todas", "Urbanas", "Scooter", "Trail", "Naked", "Sport"];
 
 // modelos oferecidos no <select> do formulário
 export const MODELOS_FORMULARIO: string[] = MOTOS.map((m) => m.nome);

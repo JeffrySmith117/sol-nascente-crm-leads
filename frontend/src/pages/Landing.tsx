@@ -17,12 +17,6 @@ import { abertaAgora, CATEGORIAS, linkLigarUnidade, linkMapaUnidade, linkWhatsap
 import type { Categoria } from "../config";
 import { formatarReais } from "../lib/format";
 
-const NUMEROS = [
-  { valor: "5 min", legenda: "Tempo médio de primeiro contato" },
-  { valor: "0%", legenda: "Taxa em planos de consórcio contemplados" },
-  { valor: "Nº 1", legenda: "Maior estoque do Piauí e Maranhão" },
-];
-
 export default function Landing() {
   const [modeloEscolhido, setModeloEscolhido] = useState("");
   const [categoria, setCategoria] = useState<Categoria | "Todas">("Todas");
@@ -58,7 +52,7 @@ export default function Landing() {
       <header className="sticky top-0 z-40 border-b border-white/10 bg-night/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
           <Link to="/" aria-label="Sol Nascente Motos Honda">
-            <Logo />
+            <Logo imagem />
           </Link>
           <nav className="hidden items-center gap-7 whitespace-nowrap text-sm font-medium text-white/70 md:flex">
             <a href="#modelos" className="transition hover:text-white">
@@ -195,18 +189,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ===== números ===== */}
-      <section className="mx-auto mt-14 max-w-6xl px-4">
-        <div className="grid grid-cols-3 divide-x divide-white/10 rounded-2xl border border-white/10 bg-panel/60">
-          {NUMEROS.map((n) => (
-            <div key={n.valor} className="px-3 py-4 sm:px-6 sm:py-5">
-              <p className="titulo text-3xl text-brand sm:text-5xl">{n.valor}</p>
-              <p className="mt-1 text-[10px] leading-snug text-white/55 sm:text-xs">{n.legenda}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* ===== modelos ===== */}
       <section id="modelos" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-16">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
@@ -236,17 +218,11 @@ export default function Landing() {
 
         {/* celular: carrossel deslizável; a partir de sm: grade */}
         <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">
-          {motosVisiveis.map((moto, i) => (
+          {motosVisiveis.map((moto) => (
             <article
               key={moto.slug}
               className="group relative flex min-w-[78%] snap-center flex-col overflow-hidden rounded-2xl border border-white/10 bg-panel p-4 transition hover:-translate-y-1 hover:border-brand/60 hover:shadow-glow sm:min-w-0"
             >
-              <span
-                aria-hidden="true"
-                className="titulo texto-contorno pointer-events-none absolute right-3 top-1 text-7xl leading-none"
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
               <div className="relative flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider">
                 <span className="rounded bg-white/10 px-2 py-0.5 text-white/80">{moto.categoria}</span>
                 <span className="text-brand-soft">{moto.situacao}</span>
@@ -313,7 +289,7 @@ export default function Landing() {
                   {cidade}
                 </span>
 
-                <div className="relative flex items-center justify-between gap-2">
+                <div className="relative flex items-center gap-2">
                   <span className="rounded bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest">
                     {u.tipo}
                   </span>
@@ -364,7 +340,7 @@ export default function Landing() {
 
       <footer className="border-t border-white/10 py-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 text-xs text-white/45 sm:flex-row">
-          <Logo />
+          <Logo imagem />
           <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-5">
             <p>© {new Date().getFullYear()} Sol Nascente Motos Honda. Todos os direitos reservados.</p>
             <Link
