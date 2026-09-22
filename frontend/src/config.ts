@@ -7,6 +7,10 @@ export interface UnidadeInfo {
   tipo: "Matriz" | "Filial";
   endereco: string;
   horario: string;
+  // mesmos horários acima, mas em números — usado para calcular "aberto agora" em tempo real.
+  // Domingo fica de fora (loja fechada); os pares são [hora que abre, hora que fecha].
+  horarioSemana: [number, number];
+  horarioSabado: [number, number];
   // número no formato DDI+DDD+número (ex.: 5586912345678). Um valor padrão já fica aqui no
   // código (números públicos da loja); definir VITE_WHATSAPP_TERESINA/VITE_WHATSAPP_TIMON no
   // ambiente sobrescreve sem precisar mexer no código.
@@ -25,6 +29,8 @@ export const UNIDADES: Record<Unidade, UnidadeInfo> = {
     tipo: "Matriz",
     endereco: "Av. Frei Serafim, 2800 — Centro, Teresina - PI",
     horario: "Seg à Sex: 08:00 às 18:00 | Sáb: 08:00 às 12:00",
+    horarioSemana: [8, 18],
+    horarioSabado: [8, 12],
     whatsapp: import.meta.env.VITE_WHATSAPP_TERESINA ?? WHATSAPP_TERESINA_PADRAO,
   },
   TIMON: {
@@ -34,6 +40,8 @@ export const UNIDADES: Record<Unidade, UnidadeInfo> = {
     tipo: "Filial",
     endereco: "Av. Presidente Médici, 1420 — Formosa, Timon - MA",
     horario: "Seg à Sex: 08:00 às 18:00 | Sáb: 08:00 às 12:00",
+    horarioSemana: [8, 18],
+    horarioSabado: [8, 12],
     whatsapp: import.meta.env.VITE_WHATSAPP_TIMON ?? WHATSAPP_TIMON_PADRAO,
   },
 };
@@ -160,4 +168,22 @@ export function linkWhatsappUnidade(unidade: UnidadeInfo, mensagem: string): str
   const numero = unidade.whatsapp.replace(/\D/g, "");
   if (!numero) return null;
   return `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+}
+
+export function linkLigarUnidade(unidade: UnidadeInfo): string {
+  return `tel:+${unidade.whatsapp.replace(/\D/g, "")}`;
+}
+
+export function linkMapaUnidade(unidade: UnidadeInfo): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(unidade.endereco)}`;
+}
+
+// true se a unidade está aberta agora, considerando o horário do navegador de quem acessa
+// (assume fuso de Brasília, que é onde as duas lojas ficam). Domingo é sempre fechado.
+export function abertaAgora(unidade: UnidadeInfo, agora: Date = new Date()): boolean {
+  const dia = agora.getDay(); // 0 = domingo, 6 = sábado
+  if (dia === 0) return false;
+  const [abre, fecha] = dia === 6 ? unidade.horarioSabado : unidade.horarioSemana;
+  const hora = agora.getHours() + agora.getMinutes() / 60;
+  return hora >= abre && hora < fecha;
 }

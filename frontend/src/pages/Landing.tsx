@@ -1,11 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { aquecerApi } from "../api/client";
-import { IconArrowRight, IconClock, IconLock, IconMapPin, IconMessage, IconShieldCheck } from "../components/Icons";
+import {
+  IconArrowRight,
+  IconClock,
+  IconLock,
+  IconMapPin,
+  IconMessage,
+  IconPhoneCall,
+  IconShieldCheck,
+} from "../components/Icons";
 import Logo from "../components/Logo";
 import MotoFoto from "../components/MotoFoto";
 import ProposalForm from "../components/ProposalForm";
-import { CATEGORIAS, linkWhatsappUnidade, MOTOS, UNIDADES } from "../config";
+import { abertaAgora, CATEGORIAS, linkLigarUnidade, linkMapaUnidade, linkWhatsappUnidade, MOTOS, UNIDADES } from "../config";
 import type { Categoria } from "../config";
 import { formatarReais } from "../lib/format";
 
@@ -15,29 +23,21 @@ const NUMEROS = [
   { valor: "Nº 1", legenda: "Maior estoque do Piauí e Maranhão" },
 ];
 
-const ETAPAS = [
-  {
-    titulo: "Envie seus dados",
-    texto: "Nome, WhatsApp e o modelo que você quer. Leva menos de um minuto.",
-  },
-  {
-    titulo: "Um consultor chama você",
-    texto: "Atendimento oficial pelo WhatsApp, em média em 5 minutos.",
-  },
-  {
-    titulo: "Simulação e test-ride",
-    texto: "Receba a simulação das parcelas e agende o test-ride em Teresina ou Timon.",
-  },
-];
-
 export default function Landing() {
   const [modeloEscolhido, setModeloEscolhido] = useState("");
   const [categoria, setCategoria] = useState<Categoria | "Todas">("Todas");
+  const [agora, setAgora] = useState(() => new Date());
   const propostaRef = useRef<HTMLElement>(null);
 
   // começa a acordar o backend (plano gratuito do Render) enquanto a pessoa lê a página
   useEffect(() => {
     aquecerApi();
+  }, []);
+
+  // atualiza o "aberto agora" das unidades a cada minuto, sem precisar recarregar a página
+  useEffect(() => {
+    const timer = window.setInterval(() => setAgora(new Date()), 60000);
+    return () => window.clearInterval(timer);
   }, []);
 
   function irParaProposta(modelo?: string) {
@@ -63,9 +63,6 @@ export default function Landing() {
           <nav className="hidden items-center gap-7 whitespace-nowrap text-sm font-medium text-white/70 md:flex">
             <a href="#modelos" className="transition hover:text-white">
               Modelos
-            </a>
-            <a href="#como-funciona" className="transition hover:text-white">
-              Como funciona
             </a>
             <a href="#unidades" className="transition hover:text-white">
               Unidades
@@ -292,23 +289,6 @@ export default function Landing() {
         </p>
       </section>
 
-      {/* ===== como funciona ===== */}
-      <section id="como-funciona" className="listras scroll-mt-16 border-y border-white/10 bg-panel/50 py-16">
-        <div className="mx-auto max-w-6xl px-4">
-          <p className="text-[11px] font-bold uppercase tracking-widest text-brand-soft">Do clique ao test-ride</p>
-          <h2 className="titulo text-4xl sm:text-5xl">Como funciona</h2>
-          <ol className="mt-8 grid gap-4 md:grid-cols-3">
-            {ETAPAS.map((etapa, i) => (
-              <li key={etapa.titulo} className="relative rounded-2xl border border-white/10 bg-night/70 p-6">
-                <span className="titulo texto-contorno text-7xl leading-none">{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="titulo mt-2 text-2xl">{etapa.titulo}</h3>
-                <p className="mt-1 text-sm text-white/60">{etapa.texto}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
       {/* ===== unidades ===== */}
       <section id="unidades" className="mx-auto max-w-6xl scroll-mt-16 px-4 py-16">
         <p className="text-[11px] font-bold uppercase tracking-widest text-brand-soft">Rede Sol Nascente</p>
@@ -320,9 +300,10 @@ export default function Landing() {
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {Object.values(UNIDADES).map((u) => {
             const cidade = u.rotulo.split(" - ")[0];
-            const link = linkWhatsappUnidade(u, `Olá! Gostaria de falar com a unidade ${u.rotulo}.`);
-            const classeBotao =
-              "flex w-full items-center justify-center gap-2 rounded-lg bg-white/10 py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-brand";
+            const aberta = abertaAgora(u, agora);
+            const linkZap = linkWhatsappUnidade(u, `Olá! Gostaria de falar com a unidade ${u.rotulo}.`);
+            const classeBotaoPrincipal =
+              "flex flex-1 items-center justify-center gap-2 rounded-lg bg-white/10 py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-brand";
             return (
               <article key={u.id} className="relative overflow-hidden rounded-2xl border border-white/10 bg-panel p-6">
                 <span
@@ -331,24 +312,47 @@ export default function Landing() {
                 >
                   {cidade}
                 </span>
-                <span className="relative rounded bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest">
-                  {u.tipo}
-                </span>
+
+                <div className="relative flex items-center justify-between gap-2">
+                  <span className="rounded bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest">
+                    {u.tipo}
+                  </span>
+                  <span
+                    className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest ${
+                      aberta ? "bg-emerald-500/15 text-emerald-400" : "bg-white/10 text-white/50"
+                    }`}
+                  >
+                    <span className={`h-1.5 w-1.5 rounded-full ${aberta ? "bg-emerald-400" : "bg-white/40"}`} />
+                    {aberta ? "Aberto agora" : "Fechado agora"}
+                  </span>
+                </div>
+
                 <h3 className="titulo relative mt-3 text-3xl">{u.nome}</h3>
-                <p className="relative mt-4 flex items-start gap-2 text-sm text-white/70">
-                  <IconMapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" /> {u.endereco}
-                </p>
+
+                <a
+                  href={linkMapaUnidade(u)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="relative mt-4 flex items-start gap-2 text-sm text-white/70 transition hover:text-white"
+                >
+                  <IconMapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
+                  <span className="underline decoration-white/20 underline-offset-2">{u.endereco}</span>
+                </a>
                 <p className="relative mt-2 flex items-start gap-2 text-sm text-white/70">
                   <IconClock className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" /> {u.horario}
                 </p>
-                <div className="relative mt-5">
-                  {link ? (
-                    <a href={link} target="_blank" rel="noreferrer" className={classeBotao}>
-                      <IconMessage className="h-4 w-4" /> Falar com {cidade}
+
+                <div className="relative mt-5 flex gap-2">
+                  <a href={linkLigarUnidade(u)} className={classeBotaoPrincipal}>
+                    <IconPhoneCall className="h-4 w-4" /> Ligar
+                  </a>
+                  {linkZap ? (
+                    <a href={linkZap} target="_blank" rel="noreferrer" className={classeBotaoPrincipal}>
+                      <IconMessage className="h-4 w-4" /> WhatsApp
                     </a>
                   ) : (
-                    <button type="button" onClick={() => irParaProposta()} className={classeBotao}>
-                      <IconMessage className="h-4 w-4" /> Falar com {cidade}
+                    <button type="button" onClick={() => irParaProposta()} className={classeBotaoPrincipal}>
+                      <IconMessage className="h-4 w-4" /> WhatsApp
                     </button>
                   )}
                 </div>
